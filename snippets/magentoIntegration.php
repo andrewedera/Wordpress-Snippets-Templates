@@ -33,8 +33,14 @@ class MagentoIntegration {
      * @return array         Returns all products
      */
     public function getAllProducts() {
+        $searchCondition .= "searchCriteria[filter_groups][0][filters][0][field]=category_id&";
+        $searchCondition .= "searchCriteria[filter_groups][0][filters][0][value]=25&";
+        $searchCondition .= "searchCriteria[filter_groups][0][filters][0][condition_type]=eq&";
+        $searchCondition .= "searchCriteria[filter_groups][1][filters][0][field]=sku&";
+        $searchCondition .= "searchCriteria[filter_groups][1][filters][0][value]=%25case%25&";
+        $searchCondition .= "searchCriteria[filter_groups][1][filters][0][condition_type]=nlike";
 
-        $this->products = $this->cUrlRequest($this->url . '/rest/V1/products?fields=items[name,price,custom_attributes]&searchCriteria[pageSize]=' . $this->items, $this->getToken());
+        $this->products = $this->cUrlRequest($this->url . '/rest/V1/products?fields=items[name,price,custom_attributes,sku]&'.$searchCondition.'&searchCriteria[pageSize]=' . $this->items, $this->getToken());
 
         return $this->products;
     }

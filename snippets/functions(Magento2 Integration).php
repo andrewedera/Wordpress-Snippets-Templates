@@ -13,19 +13,16 @@ if( false === $magTrans ){
 	$products = json_decode($magento->getAllProducts());
 	if(!empty($products) && $products != '' && !is_null($products)){
 		foreach($products->items as $product) {
+			$array = array();
 			$array = array(
 				'name' => $product->name,
 				'price' => $product->price
 			);
 			foreach($product->custom_attributes as $attribute ){
 				if($attribute->attribute_code == "url_key")
-					$array += array(
-						'url_key' => $attribute->value
-					);
+					$array = array_merge($array,array('url_key' => $attribute->value));
 				if($attribute->attribute_code == "thumbnail")
-					$array += array(
-						'thumbnail' => 'https://{URL_OF_MAGENTO}/pub/media/catalog/product' . $attribute->value
-					);
+					$array = array_merge($array,array('thumbnail' => 'https://{URL_OF_MAGENTO}/pub/media/catalog/product' . $attribute->value));
 			}
 			array_push($productObject, $array);
 		}
